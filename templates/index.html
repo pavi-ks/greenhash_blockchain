@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Farming | Plant Health & Irrigation Advisory</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f8f5;
+        }
+        header {
+            background-color: #2d6a4f;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .section {
+            margin: 2rem 0;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-around;
+        }
+        .feature-box {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            flex: 1 1 300px;
+        }
+        footer {
+            background-color: #1b4332;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Smart Farming</h1>
+        <p>Plant Health Monitoring & Irrigation Advisory Platform</p>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>Welcome to Smart Farming 🌱</h2>
+            <p>
+                Empowering farmers with intelligent solutions for better crop health, water efficiency, and yield improvement.
+                Our platform helps you monitor your soil, understand plant needs, and make data-driven irrigation decisions.
+            </p>
+        </div>
+        <div class="section">
+            <h2>📡 Soil & Climate Data Samples</h2>
+        
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% elif sensor_list %}
+                <table border="1" cellpadding="10" style="background: white; border-collapse: collapse; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>N</th><th>P</th><th>K</th>
+                            <th>Temperature (°C)</th>
+                            <th>Humidity (%)</th>
+                            <th>pH</th>
+                            <th>Rainfall (mm)</th>
+                            <th>Crop Label</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sensor-table-body">
+                        <!-- Table rows will be injected here -->
+                    </tbody>
+                </table>
+        
+                <!-- Inject the data outside the table -->
+                {{ sensor_list|json_script:"sensor-data" }}
+        
+                <script>
+                    const sensorData = JSON.parse(document.getElementById('sensor-data').textContent);
+                    const tableBody = document.getElementById('sensor-table-body');
+        
+                    let index = 0;
+                    const maxRows = 10;
+        
+                    function updateTable() {
+                        if (index >= sensorData.length) {
+                            index = 0;  // loop again if needed
+                        }
+        
+                        const item = sensorData[index];
+        
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.N}</td>
+                            <td>${item.P}</td>
+                            <td>${item.K}</td>
+                            <td>${item.temperature}</td>
+                            <td>${item.humidity}</td>
+                            <td>${item.ph}</td>
+                            <td>${item.rainfall}</td>
+                            <td>${item.label}</td>
+                        `;
+        
+                        // Remove first row if more than maxRows
+                        if (tableBody.rows.length >= maxRows) {
+                            tableBody.deleteRow(0);
+                        }
+        
+                        tableBody.appendChild(row);
+                        index++;
+        
+                        setTimeout(updateTable, 1000);
+                    }
+        
+                    window.onload = updateTable;
+                </script>
+            {% else %}
+                <p>No sensor data available.</p>
+            {% endif %}
+        </div>
+        
+
+        <div class="section features">
+            <div class="feature-box">
+                <h3>🌿 Plant Health Insights</h3>
+                <p>Get real-time diagnostics and recommendations based on soil temperature, moisture, pH, and NPK levels.</p>
+            </div>
+            <div class="feature-box">
+                <h3>💧 Smart Irrigation</h3>
+                <p>Our AI-driven engine offers water usage suggestions to avoid under or over-irrigation and improve resource efficiency.</p>
+            </div>
+            <div class="feature-box">
+                <h3>📊 Data Dashboard</h3>
+                <p>Visualize your field’s condition and past reports in a simple, farmer-friendly dashboard with charts and alerts.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; {{ year }} Smart Farming | Built for a Greener Future
+    </footer>
+</body>
+</html>

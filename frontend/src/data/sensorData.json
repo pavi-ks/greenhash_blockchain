@@ -1,0 +1,14 @@
+[
+    { "N": 90, "P": 42, "K": 43, "temperature": 20.8, "humidity": 82.0, "ph": 1.5, "rainfall": 202.9, "label": "rice" },
+    { "N": 85, "P": 58, "K": 41, "temperature": 21.7, "humidity": 80.3, "ph": 7.0, "rainfall": 226.6, "label": "rice" },
+    { "N": 78, "P": 40, "K": 38, "temperature": 22.4, "humidity": 78.1, "ph": 6.2, "rainfall": 185.3, "label": "maize" },
+    { "N": 88, "P": 55, "K": 40, "temperature": 23.1, "humidity": 79.9, "ph": 6.9, "rainfall": 210.1, "label": "wheat" },
+    { "N": 82, "P": 50, "K": 39, "temperature": 24.0, "humidity": 75.0, "ph": 6.8, "rainfall": 190.0, "label": "rice" },
+    { "N": 91, "P": 47, "K": 44, "temperature": 22.8, "humidity": 81.0, "ph": 1.7, "rainfall": 215.5, "label": "barley" },
+    { "N": 87, "P": 52, "K": 42, "temperature": 21.5, "humidity": 80.5, "ph": 6.6, "rainfall": 198.4, "label": "maize" },
+    { "N": 84, "P": 49, "K": 40, "temperature": 23.9, "humidity": 78.6, "ph": 6.3, "rainfall": 205.2, "label": "rice" },
+    { "N": 79, "P": 45, "K": 39, "temperature": 21.2, "humidity": 76.9, "ph": 6.1, "rainfall": 187.0, "label": "wheat" },
+    { "N": 80, "P": 48, "K": 41, "temperature": 22.3, "humidity": 77.5, "ph": 6.4, "rainfall": 192.8, "label": "barley" },
+    { "N": 92, "P": 60, "K": 45, "temperature": 24.6, "humidity": 83.0, "ph": 13.1, "rainfall": 230.0, "label": "rice" }
+  ]
+  
