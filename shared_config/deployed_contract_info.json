@@ -1,5 +1,4 @@
 {
-  "address": "0xeAC8B3bcb8D4d2CDf04B5940F73CC842Df69F5cd",
   "abi": [
     {
       "inputs": [
@@ -370,6 +369,5 @@
       "type": "function"
     }
   ],
-  "network": "ganache_local",
-  "timestamp": "2025-05-30T11:55:31.645Z"
+  "network": "ganache_local"
 }
