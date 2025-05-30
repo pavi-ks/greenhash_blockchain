@@ -21,7 +21,7 @@ const FertilizerSuggest = () => {
   const [remainingTime, setRemainingTime] = useState(0);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/get_labels/")
+    fetch("http://backend:8000/get_labels/")
       .then((res) => res.json())
       .then((data) => {
         if (!data.error) {
@@ -71,7 +71,7 @@ const FertilizerSuggest = () => {
         localStorage.setItem(FERT_TIMER_KEY, Math.floor(Date.now() / 1000).toString());
       }
 
-      const response = await fetch("http://127.0.0.1:8000/predict_fertilizer/", {
+      const response = await fetch("http://backend:8000/predict_fertilizer/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)

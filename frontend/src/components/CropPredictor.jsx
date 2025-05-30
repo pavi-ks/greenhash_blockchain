@@ -57,7 +57,7 @@ const CropPredictor = () => {
         localStorage.setItem(CROP_TIMER_KEY, Math.floor(Date.now() / 1000).toString());
       }
 
-      const response = await fetch("http://localhost:8000/predict_crop/", {
+      const response = await fetch("http://backend:8000/predict_crop/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
