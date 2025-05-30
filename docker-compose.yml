@@ -29,7 +29,7 @@ services:
       ganache: # Make sure ganache is started before deployer runs
         condition: service_started
     command: >
-      sh -c "npm install --legacy-peer-deps && npx hardhat run scripts/deploy.js --network ganache_local"
+      sh -c "npm install --legacy-peer-deps @types/mocha@* && npx hardhat run scripts/deploy.js --network ganache_local"
     restart: 'no' # Run once and exit
 
   backend:

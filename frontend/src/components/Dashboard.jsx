@@ -15,7 +15,7 @@ function Dashboard() {
 
   // 🔁 Fetch entire dataset once on load
   useEffect(() => {
-    fetch("http://backend:8000/realtime-data/")
+    fetch("/api/realtime-data/")
       .then((res) => res.json())
       .then((json) => {
         setFullData(json);
