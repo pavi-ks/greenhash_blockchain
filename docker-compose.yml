@@ -1,6 +1,38 @@
 version: '3.8'
 
 services:
+  ganache:
+    image: trufflesuite/ganache:latest # Using latest, could pin to a specific version like v7.9.2
+    container_name: greenhash_ganache
+    ports:
+      - "8545:8545"
+    command: >
+      ganache
+      --server.host 0.0.0.0
+      --wallet.totalAccounts 10
+      --wallet.defaultBalance 1000
+    networks:
+      - greenhash_net
+
+  contract_deployer:
+    image: node:18-alpine # Using alpine for a smaller image
+    container_name: greenhash_contract_deployer
+    working_dir: /opt/app
+    volumes:
+      - ./:/opt/app # Mount the entire project root
+      - ./shared_config:/opt/app/shared_config # Mount the shared_config directory
+    environment:
+      - INITIAL_PREDICTION_FEE=${INITIAL_PREDICTION_FEE:-0.001} # Use from .env or default
+      # GANACHE_RPC_URL is already set in hardhat.config.js to point to http://ganache:8545
+    networks:
+      - greenhash_net
+    depends_on:
+      ganache: # Make sure ganache is started before deployer runs
+        condition: service_started
+    command: >
+      sh -c "npm install --legacy-peer-deps && npx hardhat run scripts/deploy.js --network ganache_local"
+    restart: 'no' # Run once and exit
+
   backend:
     build:
       context: .
@@ -11,15 +43,21 @@ services:
     volumes:
       - ./db.sqlite3:/app/db.sqlite3 # Persist the SQLite database
       - ./blockchain/ml:/app/blockchain/ml # Ensure ML models are mounted
+      - ./shared_config:/app/shared_config # Mount shared contract info
     environment:
       - DEBUG=True # Set to False in production
       - DJANGO_ALLOWED_HOSTS=* # Configure as needed for production
       - PINATA_JWT=YOUR_PINATA_JWT # Replace with your actual Pinata JWT
-      - CONTRACT_ADDRESS=YOUR_CONTRACT_ADDRESS # Replace with your actual contract address
-      - BLOCKCHAIN_PROVIDER=http://host.docker.internal:7545 # For Ganache running on the host. Adjust if Ganache is containerized or on a different URL.
-      - ABI_PATH=blockchain/contracts/GreenHashABI.json # Relative path inside the backend container
+      - CONTRACT_ADDRESS=YOUR_CONTRACT_ADDRESS # This will be updated to read from shared_config
+      - BLOCKCHAIN_PROVIDER=http://ganache:8545 # Updated to use the Ganache service
+      - ABI_PATH=blockchain/contracts/GreenHashABI.json # This will be updated to read from shared_config
     networks:
       - greenhash_net
+    depends_on:
+      ganache:
+        condition: service_started
+      contract_deployer:
+        condition: service_completed_successfully
 
   frontend:
     build:
@@ -28,13 +66,15 @@ services:
     container_name: greenhash_frontend
     ports:
       - "3000:80" # Map Nginx port 80 to host port 3000
+    volumes:
+      - ./shared_config:/usr/share/nginx/html/shared_config # Mount shared contract info for frontend access
     depends_on:
-      - backend
+      backend:
+        condition: service_started
+      contract_deployer: # Ensures contract is deployed before frontend might try to access info
+        condition: service_completed_successfully
     networks:
       - greenhash_net
-    # It's good practice to also set environment variables for the frontend if it needs to know the backend URL
-    # For example, if your React app fetches data from http://localhost:8000/api,
-    # you'd want to make this configurable.
     # environment:
     #   - REACT_APP_API_URL=http://backend:8000/api
 

@@ -1,5 +1,22 @@
 {
+  "name": "greenhash-root",
+  "version": "1.0.0",
+  "description": "Root package for GreenHash blockchain project, including Hardhat deployment.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.3",
+    "ethers": "^6.11.1",
+    "chai": "^4.2.0",
+    "dotenv": "^16.4.5"
   }
 }
