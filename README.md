@@ -39,14 +39,15 @@ A complete smart farming platform using Django (backend), React (frontend), Mach
 
 ### 1. Clone the Repository
 ```bash
-git clone <your-repo-url>
-cd SmartFarming
+git clone <repo-url> GreenHash
+cd GreenHash
 ```
 
 ### 2. Create Virtual Environment & Install Dependencies
 ```bash
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
+# Windows Powershell: .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
@@ -120,6 +121,7 @@ web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
 ```bash
 cd frontend
 npm install
+npm install date-fns
 npm start
 ```
 Runs on `http://localhost:3000`
@@ -133,18 +135,22 @@ fetch("http://127.0.0.1:8000/get_realtime_data/")
 
 ## 🧪 Run the Project
 
-### Backend
-```bash
-python manage.py runserver
-```
-Visit: [http://127.0.0.1:8000](http://127.0.0.1:8000)
-
 ### Frontend
 ```bash
 cd frontend
 npm start
 ```
 Visit: [http://localhost:3000](http://localhost:3000)
+
+### Backend
+In another terminal, activate virtual environment
+```bash
+source venv/bin/activate  # Windows: venv\Scripts\activate
+# Windows Powershell: .\venv\Scripts\Activate.ps1
+python manage.py runserver
+```
+Visit: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
 
 ---
 
@@ -169,16 +175,25 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 ## 📦 requirements.txt (sample)
 ```
-Django==4.2
-pandas
-numpy
-requests
-scikit-learn
-gunicorn
-ipfshttpclient
-python-dotenv
+Django==5.2
+djangorestframework==3.16.0
+django-cors-headers==4.7.0
+
+numpy==2.1.3
+pandas==2.2.3
+scikit-learn==1.6.1
+scipy==1.14.1
+joblib==1.4.2
+threadpoolctl==3.6.0
+
+requests==2.32.3
+python-dateutil==2.9.0.post0
+pytz==2025.2
+tzdata==2025.2
+
 web3
-django-cors-headers
+eth-account
+ipfshttpclient
 ```
 
 ##  Sample package.json (dependencies)
