@@ -7,7 +7,6 @@ services:
     ports:
       - "8545:8545"
     command: >
-      ganache
       --server.host 0.0.0.0
       --wallet.totalAccounts 10
       --wallet.defaultBalance 1000
