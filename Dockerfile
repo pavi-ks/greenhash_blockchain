@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,12 +16,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY manage.py /app/
 COPY blockchain /app/blockchain
 COPY greenhash /app/greenhash
+COPY dataset /app/dataset
 # Ensure the ML models are copied
 COPY blockchain/ml /app/blockchain/ml
-
-# Copy the ABI file from the frontend directory to a location accessible by the backend
-# The plan is to later update settings.py to point to this new relative path.
-COPY frontend/src/contracts/GreenHashABI.json /app/blockchain/contracts/GreenHashABI.json
 
 # Expose port for the app
 EXPOSE 8000

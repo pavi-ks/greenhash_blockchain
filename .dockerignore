@@ -1,33 +1,20 @@
-# Git
-.git/
-.gitignore
+# Ignore .git directory
+.git
 
-# Python cache
-__pycache__/
-*.py[cod]
-*.py.un~
+# Ignore __pycache__ directories
+**/__pycache__
 
-# VSCode
-.vscode/
+# Ignore .DS_Store files
+**/.DS_Store
 
-# Docker specific files
-Dockerfile
-docker-compose.yml
-.dockerignore
+# Ignore environment files
+.env
+.env.*
 
-# Node modules (if any at root, though frontend has its own)
-node_modules/
+# Ignore pytest cache
+.pytest_cache
 
-# Frontend directory (contents are handled by its own Dockerfile context)
-# We don't strictly need to ignore 'frontend/' here if the backend Dockerfile
-# only copies specific backend files/dirs like 'blockchain/', 'greenhash/', etc.
-# However, if `COPY . .` was used, ignoring 'frontend/' would be crucial.
-# The current backend Dockerfile is specific, but let's add it for safety / best practice.
-frontend/
+# Ignore any editor or IDE specific files
+.vscode
+.idea
 
-# Datasets (if large and not needed by the running application)
-dataset/
-
-# OS generated files
-.DS_Store
-Thumbs.db
