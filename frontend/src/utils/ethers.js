@@ -1,4 +1,3 @@
-// src/utils/ethers.js
 import { ethers } from "ethers";
 
 export const getContract = async () => {
@@ -37,19 +36,3 @@ export const connectWallet = async () => {
   const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
   return accounts[0];
 };
-
-// const contract = await getContract();
-// const user = await connectWallet();
-
-// const activities = await contract.getUserActivities(user); // ✅ now this returns an array
-
-// activities.forEach((a, i) => {
-//   console.log(`Prediction #${i + 1}`);
-//   console.log("Type:", a.predictionType);
-//   console.log("CID:", a.ipfsCID);
-//   console.log("Time:", new Date(Number(a.timestamp) * 1000).toLocaleString());
-// });
-
-
-// const data = await contract.getUserActivities(userAddress);
-// console.log(data);
