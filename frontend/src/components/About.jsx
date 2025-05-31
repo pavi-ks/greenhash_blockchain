@@ -24,7 +24,7 @@ const visionData = [
 ];
 
 const teamMembers = [
-  { name: "Sarvesh", emoji: "🧑‍🌾", role: "IoT & Sensor Integration" },
+  { name: "Mridul", emoji: "🧑‍🌾", role: "IoT & Sensor Integration" },
   { name: "Pavithran", emoji: "👨‍💻", role: "Blockchain & Backend" },
   { name: "Kritika", emoji: "👩‍🎨", role: "Frontend & Visual Design" },
 ];
