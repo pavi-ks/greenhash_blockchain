@@ -13,7 +13,7 @@ export const getContract = async () => {
     try {
       const response = await fetch("/shared_config/deployed_contract_info.json");
       if (response.ok) {
-        ({ contractAddress, abi } = await response.json());
+        ({ address: contractAddress, abi } = await response.json());
         break; // Exit the loop if fetch is successful
       }
     } catch (error) {
@@ -28,6 +28,7 @@ export const getContract = async () => {
 
   const provider = new ethers.BrowserProvider(window.ethereum); // Correct for ethers v6
   const signer = await provider.getSigner();                    // Must be awaited
+  console.log('Contract instance created:', contractAddress, abi);
   return new ethers.Contract(contractAddress, abi, signer); // Contract runner fixed
 };
 
