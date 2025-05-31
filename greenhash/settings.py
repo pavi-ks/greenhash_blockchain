@@ -1,17 +1,56 @@
 from pathlib import Path
 import os
+import json
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'your-secret-key'
 
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '*').split(',')
 
-PINATA_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI0ZTgxMDY1OS1hMDJjLTQ0N2YtODY1OC1iMTliMTA5ZWE5NzciLCJlbWFpbCI6ImNzMjRtdDAwNkBpaXRkaC5hYy5pbiIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJiNmEwOWU0MmE4MzlkZjg3OWNhNSIsInNjb3BlZEtleVNlY3JldCI6IjQyMjdlZjUwM2I1ODlhOWQyYWQ1NDA5MmFjODFhYjc0NjJhNzI5MGQ4YzNkODYxOTViM2EyNTE5NDA5ZmI2NDkiLCJleHAiOjE3NzYyMzkxMjN9.VOTsMBECFrMunonM8Q7Qfl0X7FJmtbpeqt2kaJuF_RY"
-CONTRACT_ADDRESS = "0x0805c6248Cd28d29b327A401cA3b8e4Da53f0C0A"
-ABI_PATH = (r"E:\blockchain_project\greenhash_blockchain\frontend\src\contracts\GreenHashABI.json")
-BLOCKCHAIN_PROVIDER = "http://127.0.0.1:7545"  # or Infura
+PINATA_JWT = os.getenv('PINATA_JWT', 'YOUR_DEFAULT_PINATA_JWT')
+
+# Load contract address and ABI from shared JSON file
+CONTRACT_INFO_PATH = '/app/shared_config/deployed_contract_info.json'
+CONTRACT_ADDRESS = None
+ABI_PATH = None  # This will store the path to the JSON file itself, or a fallback path
+
+try:
+    with open(CONTRACT_INFO_PATH, 'r') as f:
+        contract_info = json.load(f)
+    CONTRACT_ADDRESS = contract_info.get('address')
+    # The ABI is within this file, so ABI_PATH points to the file.
+    # Code using ABI_PATH (e.g., views.py) will need to be aware of this
+    # and extract the 'abi' key from the loaded JSON.
+    if CONTRACT_ADDRESS and 'abi' in contract_info:
+        ABI_PATH = CONTRACT_INFO_PATH
+    
+    if not CONTRACT_ADDRESS:
+        print(f"Warning: Could not load CONTRACT_ADDRESS from {CONTRACT_INFO_PATH}")
+    if ABI_PATH is None: # If ABI was not found in JSON or CONTRACT_ADDRESS was missing
+        print(f"Warning: ABI information not found or incomplete in {CONTRACT_INFO_PATH}")
+
+except FileNotFoundError:
+    print(f"Warning: {CONTRACT_INFO_PATH} not found. Contract address and ABI may not be loaded.")
+except json.JSONDecodeError:
+    print(f"Warning: Could not decode JSON from {CONTRACT_INFO_PATH}.")
+except Exception as e:
+    print(f"Warning: An error occurred while loading contract info: {e}")
+
+# Fallback values if loading from JSON fails
+if not CONTRACT_ADDRESS:
+    print("Warning: CONTRACT_ADDRESS is not set from JSON. Using fallback placeholder.")
+    CONTRACT_ADDRESS = 'YOUR_FALLBACK_CONTRACT_ADDRESS' 
+if ABI_PATH is None:
+    fallback_abi_file = 'GreenHashABI.json' # Name of the old ABI file
+    print(f"Warning: ABI_PATH is not set from JSON. Using fallback path: blockchain/contracts/{fallback_abi_file}")
+    # Attempt to use the old ABI file located in blockchain/contracts/
+    # This assumes the frontend/src/contracts/GreenHashABI.json was copied to blockchain/contracts/GreenHashABI.json
+    # as per the backend Dockerfile.
+    ABI_PATH = BASE_DIR / 'blockchain' / 'contracts' / fallback_abi_file
+
+BLOCKCHAIN_PROVIDER = os.getenv('BLOCKCHAIN_PROVIDER', 'http://127.0.0.1:7545')  # or Infura
 
 
 

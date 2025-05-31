@@ -57,7 +57,7 @@ const CropPredictor = () => {
         localStorage.setItem(CROP_TIMER_KEY, Math.floor(Date.now() / 1000).toString());
       }
 
-      const response = await fetch("http://localhost:8000/predict_crop/", {
+      const response = await fetch("https://8000-firebase-greenhashblockchainjulesgit-1748586843860.cluster-ancjwrkgr5dvux4qug5rbzyc2y.cloudworkstations.dev/predict_crop/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

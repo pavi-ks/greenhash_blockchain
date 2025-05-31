@@ -1,0 +1,17 @@
+# Node modules - these will be installed during the Docker build
+node_modules/
+
+# Build output - this will be generated during the Docker build
+build/
+
+# Git
+.git/
+.gitignore
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Docker specific files (if any, e.g. its own Dockerfile)
+Dockerfile
+.dockerignore
