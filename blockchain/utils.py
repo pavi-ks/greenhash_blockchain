@@ -2,16 +2,19 @@ import json
 import requests
 from web3 import Web3
 
-PINATA_JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI0ZTgxMDY1OS1hMDJjLTQ0N2YtODY1OC1iMTliMTA5ZWE5NzciLCJlbWFpbCI6ImNzMjRtdDAwNkBpaXRkaC5hYy5pbiIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJiNmEwOWU0MmE4MzlkZjg3OWNhNSIsInNjb3BlZEtleVNlY3JldCI6IjQyMjdlZjUwM2I1ODlhOWQyYWQ1NDA5MmFjODFhYjc0NjJhNzI5MGQ4YzNkODYxOTViM2EyNTE5NDA5ZmI2NDkiLCJleHAiOjE3NzYyMzkxMjN9.VOTsMBECFrMunonM8Q7Qfl0X7FJmtbpeqt2kaJuF_RY"
-CONTRACT_ADDRESS = "0xCDd147Ca172C1E159E42ddd14b6dF82821370C08"
-ABI_PATH = (r"E:\blockchain_project\greenhash_blockchain\frontend\src\contracts\GreenHashABI.json")
-PROVIDER = "http://127.0.0.1:7545"  # or Infura
+from django.conf import settings
+
+PINATA_JWT = settings.PINATA_JWT
 
 def get_contract():
-    with open(ABI_PATH) as f:
-        abi = json.load(f)
-    web3 = Web3(Web3.HTTPProvider(PROVIDER))
-    contract = web3.eth.contract(address=Web3.to_checksum_address(CONTRACT_ADDRESS), abi=abi)
+    with open(settings.ABI_PATH) as f:
+        contract_info = json.load(f)
+    abi = contract_info.get('abi')
+    if abi is None:
+        raise ValueError(f"ABI not found in {settings.ABI_PATH}")
+
+    web3 = Web3(Web3.HTTPProvider(settings.BLOCKCHAIN_PROVIDER))
+    contract = web3.eth.contract(address=Web3.to_checksum_address(settings.CONTRACT_ADDRESS), abi=abi)
     return contract, web3
 
 def get_latest_cid_from_blockchain():
@@ -51,7 +54,6 @@ def upload_to_ipfs(data, name="data.json"):
     response = requests.post("https://api.pinata.cloud/pinning/pinFileToIPFS", files=files, headers=headers)
     response.raise_for_status()
     return response.json()["IpfsHash"]
-
 
 
 def upload_new_cid_to_blockchain(new_cid, sender_address=None, private_key=None):
