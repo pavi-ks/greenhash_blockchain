@@ -7,7 +7,7 @@ function HeroSection() {
       {/* Background Video */}
       <video
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
-        src="https://gateway.pinata.cloud/ipfs/bafybeihzmue3gbbvpyioi7od5rfgyhbxopbrjd5z37fz45o4zhjgp7k4bm"
+        src="https://orange-labour-finch-546.mypinata.cloud/ipfs/bafybeidolkqjskrfusfkn4r54k3tbxzz467d5aj43sfkcnitnlsslsgfmu"
         // src="/herosection_video.mp4"
         autoPlay
         loop
